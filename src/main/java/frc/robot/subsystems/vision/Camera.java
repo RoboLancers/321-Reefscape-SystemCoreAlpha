@@ -29,6 +29,10 @@ public class Camera {
 
   private final CameraUsage usage;
 
+  private final double
+      stdDevMultiplier; // represents relatively how much more or less a camera's estimates are
+  // trusted
+
   private final PhotonCamera camera;
 
   private final PhotonPoseEstimator poseEstimator;
@@ -43,6 +47,8 @@ public class Camera {
     this.name = config.cameraName();
 
     this.usage = config.usage();
+
+    this.stdDevMultiplier = config.relativeStdDevMultiplier();
 
     this.camera = camera;
 
@@ -137,11 +143,13 @@ public class Camera {
             / (visionPoseEstimate.targetsUsed.size());
 
     final double translationStdDev =
-        VisionConstants.kTranslationStdDevCoeff
+        stdDevMultiplier
+            * VisionConstants.kTranslationStdDevCoeff
             * Math.pow(avgTargetDistance, 3)
             / Math.pow(visionPoseEstimate.targetsUsed.size(), 3);
     final double rotationStdDev =
-        VisionConstants.kRotationStdDevCoeff
+        stdDevMultiplier
+            * VisionConstants.kRotationStdDevCoeff
             * Math.pow(avgTargetDistance, 3)
             / Math.pow(visionPoseEstimate.targetsUsed.size(), 3);
 
