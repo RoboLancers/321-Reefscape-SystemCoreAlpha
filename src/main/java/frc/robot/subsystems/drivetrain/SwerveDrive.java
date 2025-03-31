@@ -2,7 +2,6 @@
 package frc.robot.subsystems.drivetrain;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.DriveFeedforwards;
@@ -79,15 +78,9 @@ public interface SwerveDrive extends Subsystem {
                   feedforwards),
           new PPHolonomicDriveController(
               // PID constants for translation
-              new PIDConstants(
-                  DrivetrainConstants.kTranslationGains.kP(),
-                  DrivetrainConstants.kTranslationGains.kI(),
-                  DrivetrainConstants.kTranslationGains.kD()),
+              DrivetrainConstants.kAutoTranslationGains,
               // PID constants for rotation
-              new PIDConstants(
-                  DrivetrainConstants.kHeadingGains.kP(),
-                  DrivetrainConstants.kHeadingGains.kI(),
-                  DrivetrainConstants.kHeadingGains.kD())),
+              DrivetrainConstants.kAutoHeadingGains),
           config,
           // Assume the path needs to be flipped for Red vs Blue, this is normally the case
           () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,

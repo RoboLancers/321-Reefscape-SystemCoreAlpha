@@ -355,12 +355,25 @@ public class AutomaticAutonomousMaker3000 {
                                 .alongWith(
                                     coralSuperstructure.getEndEffector().stallCoralIfDetected())
                                 .until(() -> coralSuperstructure.atTargetState(setpoint)))
+
+                        // OR:
+
+                        // coralSuperstructure
+                        //   .goToSetpointProfiled(() -> setpoint)
+                        //   .alongWith(
+                        //       coralSuperstructure.getEndEffector().stallCoralIfDetected())
+                        //   .until(() -> coralSuperstructure.atTargetState(setpoint) &&
+                        // drive.atPoseSetpoint())
+                        //   .withTimeout(2.5)
                         .andThen(
-                            Commands.waitSeconds(0.5)
-                                .andThen(
-                                    coralSuperstructure
-                                        .outtakeCoral(() -> setpoint)
-                                        .withTimeout(0.5)))));
+                            coralSuperstructure
+                                .goToSetpointProfiled(() -> setpoint)
+                                .withDeadline(
+                                    Commands.waitSeconds(0.2)
+                                        .andThen(
+                                            coralSuperstructure
+                                                .outtakeCoral(() -> setpoint)
+                                                .withTimeout(0.3))))));
   }
 
   private Command toPathCommand(PathPlannerPath path, boolean zero) {
