@@ -184,6 +184,22 @@ public class Climber extends SubsystemBase {
         });
   }
 
+  public Command unlockClimb() {
+    return run(
+        () -> {
+          io.setClimbVoltage(Volts.zero());
+          io.setLockServoAngle(ClimberConstants.kServoUnlockPosition);
+        });
+  }
+
+  public Command lockClimb() {
+    return run(
+        () -> {
+          io.setClimbVoltage(Volts.zero());
+          io.setLockServoAngle(ClimberConstants.kServoLockPosition);
+        });
+  }
+
   public boolean climbIsHomed() {
     return climbHomed;
   }

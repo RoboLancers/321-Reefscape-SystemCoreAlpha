@@ -75,17 +75,16 @@ public class Leds extends SubsystemBase {
 
   // default command to turn off leds
   public Command off() {
-    return run(
-        () -> {
+    return run(() -> {
           LEDPattern.kOff.applyTo(buffer);
           strip.setData(buffer);
-        });
+        })
+        .ignoringDisable(true);
   }
 
   // default command to turn on & update leds
   public Command updateLeds() {
-    return run(
-        () -> {
+    return run(() -> {
           // set new pattern to the pattern of the most important signal that is true
           for (var signal : signals) {
             if (signal.condition.getAsBoolean()) {
@@ -98,7 +97,8 @@ public class Leds extends SubsystemBase {
           currentPattern.applyTo(leftBuffer);
           currentPattern.applyTo(rightBuffer);
           strip.setData(buffer);
-        });
+        })
+        .ignoringDisable(true);
   }
 
   public double calculateProgressBar(
