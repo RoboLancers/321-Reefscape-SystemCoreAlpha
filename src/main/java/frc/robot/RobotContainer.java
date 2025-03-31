@@ -118,7 +118,7 @@ public class RobotContainer {
 
   // robot queued states
   private ReefPosition queuedReefPosition = ReefPosition.RIGHT;
-  private CoralScorerSetpoint queuedSetpoint = CoralScorerSetpoint.L4;
+  private CoralScorerSetpoint queuedSetpoint = CoralScorerSetpoint.L2;
 
   private SuperstructureVisualizer stateVisualizer =
       new SuperstructureVisualizer(
@@ -132,13 +132,14 @@ public class RobotContainer {
           () ->
               queuedSetpoint == CoralScorerSetpoint.ALGAE_LOW
                   || queuedSetpoint == CoralScorerSetpoint.ALGAE_HIGH);
-  private Trigger isCoralSetpoint =
+  private Trigger isHighCoralSetpoint =
       new Trigger(
           () ->
-              queuedSetpoint == CoralScorerSetpoint.L1
-                  || queuedSetpoint == CoralScorerSetpoint.L2
+              queuedSetpoint == CoralScorerSetpoint.L2
                   || queuedSetpoint == CoralScorerSetpoint.L3
                   || queuedSetpoint == CoralScorerSetpoint.L4);
+
+  private Trigger isL1Setpoint = new Trigger(() -> queuedSetpoint == CoralScorerSetpoint.L1);
 
   private DoubleSupplier reefAlignProgressPercent =
       () ->
@@ -355,7 +356,7 @@ public class RobotContainer {
     // RIGHT BUMPER + CORAL MODE = INTAKE CORAL
     driver
         .rightBumper()
-        .and(isCoralSetpoint)
+        .and(isHighCoralSetpoint.or(isL1Setpoint))
         .whileTrue(
             StationAlign.rotateToNearestStationTag(drivetrain, driverForward, driverStrafe)
                 .onlyWhile(() -> StationAlign.getStationDistance(drivetrain) < 2)
@@ -376,7 +377,7 @@ public class RobotContainer {
     // RIGHT TRIGGER + CORAL MODE = AUTO ALIGN TO CORAL
     driver
         .rightTrigger()
-        .and(isCoralSetpoint)
+        .and(isHighCoralSetpoint)
         .whileTrue(
             Commands.runOnce(() -> isDriverOverride = false)
                 .andThen(
@@ -460,7 +461,7 @@ public class RobotContainer {
     // RIGHT TRIGGER RELEASE + CORAL MODE = OUTTAKE CORAL
     driver
         .rightTrigger()
-        .and(isCoralSetpoint)
+        .and(isHighCoralSetpoint)
         .onFalse( // for coral scoring
             coralSuperstructure
                 .goToSetpointPID(() -> queuedSetpoint) // ensure we're at the setpoint
@@ -472,7 +473,7 @@ public class RobotContainer {
                             && !driver.povLeft().getAsBoolean()
                             && ReefAlign.isWithinReefRange(
                                 drivetrain, ReefAlign.kMechanismDeadbandThreshold)
-                            && isCoralSetpoint.getAsBoolean()) // and outtake coral
+                            && isHighCoralSetpoint.getAsBoolean()) // and outtake coral
                 .withTimeout(0.5) // timeout at 1 second
                 .andThen(
                     // move arm up and go back down (only if we're already at the scoring setpoint
@@ -495,12 +496,38 @@ public class RobotContainer {
                     //             .atHeight(CoralScorerSetpoint.NEUTRAL.getElevatorHeight()))
                     ));
 
+    // L1 CORAL CONTROLS
+    driver
+        .rightTrigger()
+        .and(isL1Setpoint)
+        .whileTrue(
+            coralSuperstructure
+                .goToSetpointPID(() -> queuedSetpoint)
+                .alongWith(
+                    ReefAlign.rotateToNearestReefTag(
+                        drivetrain, driverForward, driverStrafe, true)));
+
+    driver
+        .rightTrigger()
+        .and(isL1Setpoint)
+        .onFalse(
+            coralSuperstructure
+                .goToSetpointPID(() -> queuedSetpoint)
+                .alongWith(coralSuperstructure.outtakeCoral(() -> queuedSetpoint))
+                .withTimeout(0.5)
+                .onlyIf(
+                    () ->
+                        coralSuperstructure.atTargetState(queuedSetpoint)
+                            && queuedSetpoint != CoralScorerSetpoint.NEUTRAL
+                            && !driver.povLeft().getAsBoolean()
+                            && isL1Setpoint.getAsBoolean()));
+
     // --- CORAL MANUAL CONTROLS ---
     // LEFT TRIGGER + CORAL MODE = ALIGN CORAL MANUALLY
 
     driver
         .leftTrigger()
-        .and(isCoralSetpoint)
+        .and(isHighCoralSetpoint.or(isL1Setpoint))
         .whileTrue(coralSuperstructure.goToSetpointPID(() -> queuedSetpoint));
 
     // LEFT TRIGGER RELEASE + CORAL MODE = OUTTAKE CORAL
@@ -515,7 +542,8 @@ public class RobotContainer {
                         coralSuperstructure.atTargetState(queuedSetpoint)
                             && queuedSetpoint != CoralScorerSetpoint.NEUTRAL
                             && !driver.povLeft().getAsBoolean()
-                            && isCoralSetpoint.getAsBoolean()) // and outtake coral
+                            && (isHighCoralSetpoint.getAsBoolean()
+                                || isL1Setpoint.getAsBoolean())) // and outtake coral
                 .withTimeout(0.5)
                 .andThen(
                     // move arm up and go back down (only if we're already at the scoring setpoint
