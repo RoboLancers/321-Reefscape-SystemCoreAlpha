@@ -276,9 +276,14 @@ public class ReefAlign {
         });
   }
 
-  /** Maintain translational driving while rotating toward the nearest reef tag */
   public static Command rotateToNearestReefTag(
       SwerveDrive swerveDrive, DoubleSupplier x, DoubleSupplier y) {
+    return rotateToNearestReefTag(swerveDrive, x, y, false);
+  }
+
+  /** Maintain translational driving while rotating toward the nearest reef tag */
+  public static Command rotateToNearestReefTag(
+      SwerveDrive swerveDrive, DoubleSupplier x, DoubleSupplier y, boolean backwards) {
     return Commands.runOnce(() -> Leds.getInstance().isRotateAligning = true)
         .andThen(
             swerveDrive.driveFixedHeading(
@@ -287,12 +292,19 @@ public class ReefAlign {
                 () ->
                     getNearestReefPose(swerveDrive.getPose())
                         .getRotation()
-                        .plus(kReefAlignmentRotation)))
+                        .plus(
+                            kReefAlignmentRotation.plus(
+                                backwards ? Rotation2d.k180deg : Rotation2d.kZero))))
         .finallyDo(() -> Leds.getInstance().isRotateAligning = false);
   }
 
   public static Command rotateToNearestReefTagFullField(
       SwerveDrive swerveDrive, DoubleSupplier x, DoubleSupplier y) {
+    return rotateToNearestReefTag(swerveDrive, x, y, false);
+  }
+
+  public static Command rotateToNearestReefTagFullField(
+      SwerveDrive swerveDrive, DoubleSupplier x, DoubleSupplier y, boolean backwards) {
     return Commands.runOnce(() -> Leds.getInstance().isRotateAligning = true)
         .andThen(
             swerveDrive.driveFixedHeading(
@@ -301,7 +313,9 @@ public class ReefAlign {
                 () ->
                     getNearestReefPoseFullField(swerveDrive.getPose())
                         .getRotation()
-                        .plus(kReefAlignmentRotation)))
+                        .plus(
+                            kReefAlignmentRotation.plus(
+                                backwards ? Rotation2d.k180deg : Rotation2d.kZero))))
         .finallyDo(() -> Leds.getInstance().isRotateAligning = false);
   }
 
