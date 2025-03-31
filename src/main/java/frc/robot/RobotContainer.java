@@ -500,12 +500,7 @@ public class RobotContainer {
     driver
         .rightTrigger()
         .and(isL1Setpoint)
-        .whileTrue(
-            coralSuperstructure
-                .goToSetpointPID(() -> queuedSetpoint)
-                .alongWith(
-                    ReefAlign.rotateToNearestReefTag(
-                        drivetrain, driverForward, driverStrafe, true)));
+        .whileTrue(coralSuperstructure.goToSetpointPID(() -> queuedSetpoint));
 
     driver
         .rightTrigger()
