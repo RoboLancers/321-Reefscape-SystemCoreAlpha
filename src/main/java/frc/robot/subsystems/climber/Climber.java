@@ -94,10 +94,10 @@ public class Climber extends SubsystemBase {
                     () ->
                         inputs.climbAngle.in(Degrees)
                             <= ClimberConstants.kClimbThreshold.in(Degrees)))
-                .andThen(Commands.runOnce(() -> io.setClimbVoltage(Volts.of(0))))
-                .andThen(Commands.waitSeconds(0.1))
-                .andThen(() -> io.setLockServoAngle(ClimberConstants.kServoLockPosition))
-                .andThen(Commands.run(() -> io.setClimbVoltage(Volts.of(0))));
+        .andThen(Commands.runOnce(() -> io.setClimbVoltage(Volts.of(0))))
+        .andThen(Commands.waitSeconds(0.1))
+        .andThen(() -> io.setLockServoAngle(ClimberConstants.kServoLockPosition))
+        .andThen(Commands.run(() -> io.setClimbVoltage(Volts.of(0))));
   }
 
   // creates placeholder implementation to disable robot
@@ -127,10 +127,10 @@ public class Climber extends SubsystemBase {
                     () ->
                         inputs.climbAngle.in(Degrees)
                             <= ClimberConstants.kClimbThreshold.in(Degrees)))
-                .andThen(Commands.runOnce(() -> io.setClimbVoltage(Volts.of(0))))
-                .andThen(Commands.waitSeconds(0.1))
-                .andThen(() -> io.setLockServoAngle(ClimberConstants.kServoLockPosition))
-                .andThen(Commands.run(() -> io.setClimbVoltage(Volts.of(0))));
+        .andThen(Commands.runOnce(() -> io.setClimbVoltage(Volts.of(0))))
+        .andThen(Commands.waitSeconds(0.1))
+        .andThen(() -> io.setLockServoAngle(ClimberConstants.kServoLockPosition))
+        .andThen(Commands.run(() -> io.setClimbVoltage(Volts.of(0))));
   }
 
   // get to a desired angle by setting pivot voltage to sum of calculated pid and feedforward
