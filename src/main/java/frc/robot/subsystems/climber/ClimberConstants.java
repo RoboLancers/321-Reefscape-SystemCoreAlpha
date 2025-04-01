@@ -33,7 +33,7 @@ public class ClimberConstants {
 
   // climb servo lock + unlock positions
   public static final Angle kServoLockPosition = Degrees.of(-10);
-  public static final Angle kServoUnlockPosition = Degrees.of(80);
+  public static final Angle kServoUnlockPosition = Degrees.of(100);
 
   // climb motor config
   public static final boolean kClimbInverted = false;
