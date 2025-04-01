@@ -12,6 +12,7 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.epilogue.Logged;
 import edu.wpi.first.units.measure.Angle;
@@ -38,12 +39,14 @@ public class ClimberIOSpark implements ClimberIO {
             .inverted(ClimberConstants.kClimbInverted)
             .voltageCompensation(ClimberConstants.kNominalVoltage.in(Volts))
             .smartCurrentLimit(ClimberConstants.kSmartCurrentLimit)
+            .idleMode(IdleMode.kBrake)
             .apply(
                 new EncoderConfig()
                     .velocityConversionFactor(ClimberConstants.kClimbVelocityConversionFactor)
                     .positionConversionFactor(ClimberConstants.kClimbPositionConversionFactor)),
         ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
+    climbServo.setBoundsMicroseconds(2000, 0, 0, 0, 1000);
   }
 
   public ClimberIOSpark() {

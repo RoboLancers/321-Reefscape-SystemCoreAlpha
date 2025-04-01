@@ -94,6 +94,8 @@ public class Climber extends SubsystemBase {
                     () ->
                         inputs.climbAngle.in(Degrees)
                             <= ClimberConstants.kClimbThreshold.in(Degrees)))
+        .andThen(Commands.runOnce(() -> io.setClimbVoltage(Volts.of(0))))
+        .andThen(Commands.waitSeconds(0.1))
         .andThen(() -> io.setLockServoAngle(ClimberConstants.kServoLockPosition))
         .andThen(Commands.run(() -> io.setClimbVoltage(Volts.of(0))));
   }
@@ -125,6 +127,8 @@ public class Climber extends SubsystemBase {
                     () ->
                         inputs.climbAngle.in(Degrees)
                             <= ClimberConstants.kClimbThreshold.in(Degrees)))
+        .andThen(Commands.runOnce(() -> io.setClimbVoltage(Volts.of(0))))
+        .andThen(Commands.waitSeconds(0.1))
         .andThen(() -> io.setLockServoAngle(ClimberConstants.kServoLockPosition))
         .andThen(Commands.run(() -> io.setClimbVoltage(Volts.of(0))));
   }
@@ -181,6 +185,22 @@ public class Climber extends SubsystemBase {
     return runOnce(
         () -> {
           io.resetEncoder(ClimberConstants.kStartingAngle);
+        });
+  }
+
+  public Command unlockClimb() {
+    return run(
+        () -> {
+          io.setClimbVoltage(Volts.zero());
+          io.setLockServoAngle(ClimberConstants.kServoUnlockPosition);
+        });
+  }
+
+  public Command lockClimb() {
+    return run(
+        () -> {
+          io.setClimbVoltage(Volts.zero());
+          io.setLockServoAngle(ClimberConstants.kServoLockPosition);
         });
   }
 

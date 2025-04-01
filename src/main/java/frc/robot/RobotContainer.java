@@ -188,8 +188,9 @@ public class RobotContainer {
     // coralEndEffector.setDefaultCommand(coralEndEffector.runVolts(() -> Volts.of(1)));
 
     climber.setDefaultCommand(
-        // climber.setMechanismVoltage(() -> Volts.zero())
-        climber.goToAngle(() -> ClimberConstants.kDefaultAngle));
+        climber.setMechanismVoltage(() -> Volts.zero())
+        // climber.goToAngle(() -> ClimberConstants.kDefaultAngle)
+        );
 
     leds.setDefaultCommand(leds.updateLeds());
 
@@ -211,12 +212,15 @@ public class RobotContainer {
   private double volts = 0;
 
   private void configureTuningBindings() {
+
+    driver.a().onTrue(climber.lockClimb());
+    driver.y().onTrue(climber.unlockClimb());
     // driver.a().whileTrue(elevatorArm.tune());
     // driver.y().whileTrue(coralEndEffector.tune());
-    driver.a().whileTrue(coralSuperstructure.tune());
+    // driver.a().whileTrue(coralSuperstructure.tune());
     // driver.b().whileTrue(coralSuperstructure.feedCoral());
-    driver.leftBumper().whileTrue(coralEndEffector.intakeCoral());
-    driver.rightBumper().whileTrue(coralEndEffector.outtakeCoral(() -> queuedSetpoint));
+    // driver.leftBumper().whileTrue(coralEndEffector.intakeCoral());
+    // driver.rightBumper().whileTrue(coralEndEffector.outtakeCoral(() -> queuedSetpoint));
 
     // driver.a().whileTrue(coralEndEffector.runAtVelocity(() -> RPM.of(-2000)));
     // driver.b().whileTrue(coralEndEffector.runAtVelocity(() -> RPM.of(-3000)));
@@ -253,7 +257,7 @@ public class RobotContainer {
     //               System.out.println("Changing volts to: " + volts);
     //             }));
 
-    driver.y().whileTrue(ReefAlign.tuneAlignment(drivetrain));
+    // driver.y().whileTrue(ReefAlign.tuneAlignment(drivetrain));
 
     // driver.b().whileTrue(coralSuperstructure.feedCoral());
 
