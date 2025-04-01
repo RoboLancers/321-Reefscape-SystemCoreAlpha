@@ -39,6 +39,8 @@ public class ElevatorIOTalon implements ElevatorIO {
 
   public TalonFX elevatorMotorRight = new TalonFX(ElevatorConstants.kRightMotorID);
 
+  private Distance lastTargetHeight = ElevatorConstants.kElevatorStartingHeight;
+
   // Constructor: Sets up motors
   public ElevatorIOTalon() {
     setupMotors();
@@ -57,8 +59,7 @@ public class ElevatorIOTalon implements ElevatorIO {
                 * ElevatorConstants.kElevatorConversion.in(Meters));
     inputs.current = Amps.of(elevatorMotorRight.getStatorCurrent().getValueAsDouble());
     inputs.atSetpoint =
-        elevatorMotorRight.getClosedLoopError().getValueAsDouble()
-                * ElevatorConstants.kElevatorConversion.in(Meters)
+        Math.abs(inputs.height.in(Meters) - lastTargetHeight.in(Meters))
             < ElevatorConstants.kHeightTolerance.in(Meters);
   }
 
@@ -129,6 +130,7 @@ public class ElevatorIOTalon implements ElevatorIO {
 
   @Override
   public void goToPosition(Distance position) {
+    lastTargetHeight = position;
     elevatorMotorRight.setControl(new MotionMagicVoltage(convertMetersToRot(position.in(Meters))));
     elevatorMotorLeft.setControl(
         new Follower(elevatorMotorRight.getDeviceID(), ElevatorConstants.kFollowerInverted));

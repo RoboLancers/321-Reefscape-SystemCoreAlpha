@@ -38,7 +38,7 @@ public class ElevatorConstants {
   public static final Distance kSlowedHeight = Inches.of(65);
 
   // controller config
-  public static final Distance kHeightTolerance = Meters.of(0.1);
+  public static final Distance kHeightTolerance = Meters.of(0.01);
 
   // Elevator Motor Configs
   public static final boolean kLeftInverted = false;

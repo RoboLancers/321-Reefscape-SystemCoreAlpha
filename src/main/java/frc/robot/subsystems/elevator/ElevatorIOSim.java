@@ -39,6 +39,7 @@ public class ElevatorIOSim implements ElevatorIO {
           ElevatorConstants.kElevatorStartingHeight.in(Meters));
 
   public ElevatorIOSim() {
+    this.pidController.setTolerance(ElevatorConstants.kHeightTolerance.in(Meters));
     setOnboardPID(config);
   }
 

@@ -353,4 +353,10 @@ public class DrivetrainSim implements SwerveDrive {
   public Pose2d closestAprilTag() {
     return ReefAlign.getNearestReefPose(getPose());
   }
+
+  // for logging purposes
+  @Logged(name = "AtPoseSetpoint")
+  public boolean atSetpoint() {
+    return atPoseSetpoint();
+  }
 }

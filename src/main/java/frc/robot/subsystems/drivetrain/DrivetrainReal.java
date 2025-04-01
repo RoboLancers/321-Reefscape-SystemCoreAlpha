@@ -368,4 +368,10 @@ public class DrivetrainReal extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder>
 
     poseField.setRobotPose(getPose());
   }
+
+  // for logging purposes
+  @Logged(name = "AtPoseSetpoint")
+  public boolean atSetpoint() {
+    return atPoseSetpoint();
+  }
 }

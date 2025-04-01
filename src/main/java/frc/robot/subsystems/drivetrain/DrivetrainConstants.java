@@ -7,6 +7,7 @@ import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 
+import com.pathplanner.lib.config.PIDConstants;
 import edu.wpi.first.epilogue.Logged;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.units.measure.Angle;
@@ -38,6 +39,9 @@ public class DrivetrainConstants {
   public static final AutoGains kTuneTranslationGains = new AutoGains(0, 0, 0); // isn't used
   public static final AutoGains kTuneHeadingGains =
       new AutoGains(6, 0, 0.01); // for heading controller
+
+  public static final PIDConstants kAutoTranslationGains = new PIDConstants(5, 0, 0);
+  public static final PIDConstants kAutoHeadingGains = new PIDConstants(5, 0, 0);
 
   public static final Distance kTrackWidth = Inches.of(29);
   public static final Distance kWheelBase = Inches.of(29);
