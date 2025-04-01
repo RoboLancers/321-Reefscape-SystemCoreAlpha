@@ -356,7 +356,7 @@ public class RobotContainer {
     // RIGHT BUMPER + CORAL MODE = INTAKE CORAL
     driver
         .rightBumper()
-        .and(isHighCoralSetpoint.or(isL1Setpoint))
+        // .and(isHighCoralSetpoint.or(isL1Setpoint))
         .whileTrue(
             StationAlign.rotateToNearestStationTag(drivetrain, driverForward, driverStrafe)
                 .onlyWhile(() -> StationAlign.getStationDistance(drivetrain) < 2)
