@@ -28,12 +28,12 @@ public class ClimberConstants {
   public static final Distance kClimbLength = Inches.of(0.6);
   public static final Angle kClimbMinAngle = Degrees.of(-90); // freely rotating climber
   public static final Angle kClimbMaxAngle = Degrees.of(270);
-  public static final Angle kClimbPrepAngle = Degrees.of(180);
+  public static final Angle kClimbPrepAngle = Degrees.of(165);
   public static final Angle kDefaultAngle = Degrees.of(-90);
 
   // climb servo lock + unlock positions
-  public static final Angle kServoLockPosition = Degrees.of(-10);
-  public static final Angle kServoUnlockPosition = Degrees.of(100);
+  public static final Angle kServoLockPosition = Degrees.of(100);
+  public static final Angle kServoUnlockPosition = Degrees.of(0);
 
   // climb motor config
   public static final boolean kClimbInverted = false;
