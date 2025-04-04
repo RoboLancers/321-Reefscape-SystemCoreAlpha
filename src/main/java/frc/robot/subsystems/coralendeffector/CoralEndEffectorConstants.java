@@ -21,7 +21,7 @@ public class CoralEndEffectorConstants {
 
   // Setpoints
   public static final AngularVelocity kCoralIntakeRPM = RPM.of(3000);
-  public static final AngularVelocity kL1OuttakeRPM = RPM.of(-3142);
+  public static final AngularVelocity kL1OuttakeRPM = RPM.of(-2900);
   public static final AngularVelocity kL2OuttakeRPM = RPM.of(-1500);
   public static final AngularVelocity kL3OuttakeRPM = RPM.of(-1500);
   public static final AngularVelocity kL4OuttakeRPM = RPM.of(-1500);
