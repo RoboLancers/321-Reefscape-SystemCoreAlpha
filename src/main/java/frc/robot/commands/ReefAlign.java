@@ -54,8 +54,8 @@ public class ReefAlign {
   private static final Transform2d kRightAlignTransform =
       new Transform2d(kReefDistance, kRightAlignDistance, kReefAlignmentRotation);
 
-  private static final List<Integer> kBlueReefTagIDs = List.of(17, 18, 19, 20, 21, 22);
-  private static final List<Integer> kRedReefTagIDs = List.of(6, 7, 8, 9, 10, 11);
+  public static final List<Integer> kBlueReefTagIDs = List.of(17, 18, 19, 20, 21, 22);
+  public static final List<Integer> kRedReefTagIDs = List.of(6, 7, 8, 9, 10, 11);
 
   private static final List<Pose2d> blueReefTags = AprilTagUtil.tagIDsToPoses(kBlueReefTagIDs);
   private static final List<Pose2d> redReefTags = AprilTagUtil.tagIDsToPoses(kRedReefTagIDs);
@@ -211,7 +211,8 @@ public class ReefAlign {
                       };
 
                   return new AlignmentSetpoint(target, true);
-                }))
+                },
+                swerveDrive::getReefVisionPose))
         .finallyDo(() -> Leds.getInstance().isReefAligning = false);
   }
 
