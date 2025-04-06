@@ -4,10 +4,13 @@ package frc.robot;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.epilogue.Logged;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.simulation.AddressableLEDSim;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -16,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.auto.AutomaticAutonomousMaker3000;
+import frc.robot.commands.ControllerCommands;
 import frc.robot.commands.ReefAlign;
 import frc.robot.commands.StationAlign;
 import frc.robot.subsystems.AlgaeSuperstructure;
@@ -584,6 +588,15 @@ public class RobotContainer {
                     coralSuperstructure.knockAlgae(),
                     ReefAlign.rotateToNearestReefTagFullField(
                         drivetrain, driverForward, driverStrafe)));
+
+    new Trigger(() -> Timer.getMatchTime() < 16)
+        .onTrue(
+            ControllerCommands.rumbleController(
+                driver.getHID(), Seconds.of(0.5), RumbleType.kBothRumble, 1.0));
+    new Trigger(() -> Timer.getMatchTime() < 5)
+        .onTrue(
+            ControllerCommands.rumbleController(
+                driver.getHID(), Seconds.of(0.5), RumbleType.kBothRumble, 1.0));
   }
 
   public void configManipTriggers() {

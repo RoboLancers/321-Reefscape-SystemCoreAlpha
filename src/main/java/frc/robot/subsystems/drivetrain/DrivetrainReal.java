@@ -215,7 +215,8 @@ public class DrivetrainReal extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder>
             / (DrivetrainConstants.kAlignmentVelocityRadius.in(Meters)
                 - DrivetrainConstants.kAlignmentPIDRadius.in(Meters));
 
-    double ffFactor = DriverStation.isAutonomous() ? autoFfFactor : 0;
+    // double ffFactor = DriverStation.isAutonomous() ? autoFfFactor : 0;
+    double ffFactor = 0;
 
     ChassisSpeeds targetSpeeds =
         ChassisSpeeds.discretize(

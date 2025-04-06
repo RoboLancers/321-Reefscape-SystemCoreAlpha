@@ -31,7 +31,7 @@ import org.json.simple.parser.ParseException;
 @Logged
 public class AutomaticAutonomousMaker3000 {
 
-  private static final LinearVelocity kScorePathEndVelocity = MetersPerSecond.of(1.5);
+  private static final LinearVelocity kScorePathEndVelocity = MetersPerSecond.of(0.5);
 
   private CycleAutoChooser autoChooser = new CycleAutoChooser(5);
 
@@ -369,7 +369,7 @@ public class AutomaticAutonomousMaker3000 {
                             coralSuperstructure
                                 .goToSetpointProfiled(() -> setpoint)
                                 .withDeadline(
-                                    Commands.waitSeconds(0.2)
+                                    Commands.waitSeconds(0.4)
                                         .andThen(
                                             coralSuperstructure
                                                 .outtakeCoral(() -> setpoint)
