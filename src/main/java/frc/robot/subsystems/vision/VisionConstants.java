@@ -113,8 +113,8 @@ public class VisionConstants {
       new Transform3d(
           Inches.of(-11.1),
           Inches.of(8.7),
-          Inches.of(7.82),
-          new Rotation3d(Degrees.of(0), Degrees.of(-5), Degrees.of(-20)));
+          Inches.of(7.82 - 1.575),
+          new Rotation3d(Degrees.of(0), Degrees.of(-5.5), Degrees.of(-20)));
 
   private static final Transform3d k321FrontLeftSwerveModuleCameraMountTransform =
       new Transform3d(
