@@ -159,27 +159,33 @@ public interface SwerveDrive extends Subsystem {
   }
 
   // field relative auto drive w/ external pid controllers
-  void driveToFieldPose(Pose2d pose);
+  void driveToFieldPose(Pose2d pose, Pose2d currentPose);
 
   default Command driveToFieldPose(Supplier<AlignmentSetpoint> pose) {
+    return driveToFieldPose(pose, this::getPose);
+  }
+
+  default Command driveToFieldPose(Supplier<AlignmentSetpoint> pose, Supplier<Pose2d> currentPose) {
     return runOnce(
             () -> {
               ChassisSpeeds speeds =
                   ChassisSpeeds.fromRobotRelativeSpeeds(
-                      getChassisSpeeds(), getPose().getRotation());
+                      getChassisSpeeds(), currentPose.get().getRotation());
 
-              xPoseController.reset(getPose().getTranslation().getX(), speeds.vxMetersPerSecond);
+              xPoseController.reset(
+                  currentPose.get().getTranslation().getX(), speeds.vxMetersPerSecond);
 
-              yPoseController.reset(getPose().getTranslation().getY(), speeds.vyMetersPerSecond);
+              yPoseController.reset(
+                  currentPose.get().getTranslation().getY(), speeds.vyMetersPerSecond);
 
               thetaController.reset(
-                  getPose().getRotation().getRadians(), speeds.omegaRadiansPerSecond);
+                  currentPose.get().getRotation().getRadians(), speeds.omegaRadiansPerSecond);
             })
         .andThen(
             run(
                 () -> {
                   setAlignmentSetpoint(pose.get());
-                  driveToFieldPose(pose.get().pose);
+                  driveToFieldPose(pose.get().pose, currentPose.get());
                 }));
   }
 

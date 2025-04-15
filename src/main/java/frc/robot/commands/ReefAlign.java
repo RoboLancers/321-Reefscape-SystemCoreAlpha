@@ -41,9 +41,9 @@ public class ReefAlign {
   public static final Map<Integer, Pose2d> centerAlignPoses = new HashMap<>();
   public static final Map<Integer, Pose2d> rightAlignPoses = new HashMap<>();
 
-  private static final Distance kLeftAlignDistance = Inches.of(-8.85); // -9.1
-  private static final Distance kReefDistance = Inches.of(17.5);
-  private static final Distance kRightAlignDistance = Inches.of(3.6); // 5.4
+  private static final Distance kLeftAlignDistance = Inches.of(-8.9); // -9.1
+  private static final Distance kReefDistance = Inches.of(18);
+  private static final Distance kRightAlignDistance = Inches.of(4.6); // 5.4
   private static final Distance kIntermediateDistance = Inches.of(-10);
 
   private static final Rotation2d kReefAlignmentRotation = Rotation2d.k180deg;
@@ -54,8 +54,8 @@ public class ReefAlign {
   private static final Transform2d kRightAlignTransform =
       new Transform2d(kReefDistance, kRightAlignDistance, kReefAlignmentRotation);
 
-  private static final List<Integer> kBlueReefTagIDs = List.of(17, 18, 19, 20, 21, 22);
-  private static final List<Integer> kRedReefTagIDs = List.of(6, 7, 8, 9, 10, 11);
+  public static final List<Integer> kBlueReefTagIDs = List.of(17, 18, 19, 20, 21, 22);
+  public static final List<Integer> kRedReefTagIDs = List.of(6, 7, 8, 9, 10, 11);
 
   private static final List<Pose2d> blueReefTags = AprilTagUtil.tagIDsToPoses(kBlueReefTagIDs);
   private static final List<Pose2d> redReefTags = AprilTagUtil.tagIDsToPoses(kRedReefTagIDs);
@@ -211,7 +211,8 @@ public class ReefAlign {
                       };
 
                   return new AlignmentSetpoint(target, true);
-                }))
+                },
+                swerveDrive::getReefVisionPose))
         .finallyDo(() -> Leds.getInstance().isReefAligning = false);
   }
 

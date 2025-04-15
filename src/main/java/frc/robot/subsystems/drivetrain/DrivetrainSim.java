@@ -172,10 +172,8 @@ public class DrivetrainSim implements SwerveDrive {
   }
 
   @Override
-  public void driveToFieldPose(Pose2d pose) {
+  public void driveToFieldPose(Pose2d pose, Pose2d currentPose) {
     if (pose == null) return;
-
-    final Pose2d currentPose = getPose();
 
     double distance =
         currentPose.getTranslation().getDistance(alignmentSetpoint.pose().getTranslation());

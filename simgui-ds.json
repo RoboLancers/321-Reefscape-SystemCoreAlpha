@@ -80,7 +80,12 @@
         -1,
         47
       ],
-      "povCount": 0
+      "povConfig": [
+        {
+          "key0": 333
+        }
+      ],
+      "povCount": 1
     },
     {
       "axisConfig": [
