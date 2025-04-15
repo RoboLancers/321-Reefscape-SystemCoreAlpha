@@ -49,7 +49,10 @@ public class Vision extends VirtualSubsystem {
     for (final var est : latestEstimates) {
       visionDataConsumer.accept(est);
 
-      if (est.sourceType() == CameraUsage.REEF && isValidReefPose(est)) {
+      if (est.sourceType() == CameraUsage.REEF
+          && isValidReefPose(
+              est) // TODO: if new vision filtering is causing problems, comment this line
+      ) {
         reefVisionDataConsumer.accept(est);
       }
     }

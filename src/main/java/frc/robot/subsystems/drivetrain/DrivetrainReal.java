@@ -198,9 +198,7 @@ public class DrivetrainReal extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder>
   }
 
   @Override
-  public void driveToFieldPose(Pose2d pose) {
-
-    final var currentPose = getPose();
+  public void driveToFieldPose(Pose2d pose, Pose2d currentPose) {
 
     double distance =
         currentPose.getTranslation().getDistance(alignmentSetpoint.pose().getTranslation());

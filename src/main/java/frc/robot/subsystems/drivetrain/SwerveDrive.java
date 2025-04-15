@@ -159,7 +159,7 @@ public interface SwerveDrive extends Subsystem {
   }
 
   // field relative auto drive w/ external pid controllers
-  void driveToFieldPose(Pose2d pose);
+  void driveToFieldPose(Pose2d pose, Pose2d currentPose);
 
   default Command driveToFieldPose(Supplier<AlignmentSetpoint> pose) {
     return driveToFieldPose(pose, this::getPose);
@@ -185,7 +185,7 @@ public interface SwerveDrive extends Subsystem {
             run(
                 () -> {
                   setAlignmentSetpoint(pose.get());
-                  driveToFieldPose(pose.get().pose);
+                  driveToFieldPose(pose.get().pose, currentPose.get());
                 }));
   }
 
