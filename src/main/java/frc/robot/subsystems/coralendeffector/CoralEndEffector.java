@@ -30,10 +30,11 @@ public class CoralEndEffector extends SubsystemBase {
   private CoralEndEffectorConfig config;
 
   public static CoralEndEffector create() {
-    return RobotBase.isReal()
-        ? new CoralEndEffector(new CoralEndEffectorIOReal(), CoralEndEffectorIOReal.config)
-        : new CoralEndEffector(new CoralEndEffectorIOSim(), CoralEndEffectorIOSim.config);
+    return new CoralEndEffector(new CoralEndEffectorIOReal(), new CoralEndEffectorConfig(0, 0, 0, 0));
   }
+    // return RobotBase.isReal()
+    //     ? new CoralEndEffector(new CoralEndEffectorIOReal(), CoralEndEffectorIOReal.config)
+    //     : new CoralEndEffector(new CoralEndEffectorIOSim(), CoralEndEffectorIOSim.config);}
 
   public static CoralEndEffector disable() {
     return new CoralEndEffector(new CoralEndEffectorIOIdeal(), CoralEndEffectorIOIdeal.config);

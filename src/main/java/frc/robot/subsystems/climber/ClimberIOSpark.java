@@ -19,6 +19,9 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.motorcontrol.PWMMotorController;
+import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+
 
 /*
  * Spark implementation of the real climber subsystem
@@ -29,7 +32,7 @@ public class ClimberIOSpark implements ClimberIO {
 
   public static final ClimberConfig config = new ClimberConfig(2, 0, 0, 0);
 
-  private SparkMax climbMotor = new SparkMax(ClimberConstants.kMotorId, MotorType.kBrushless);
+  private SparkMax climbMotor = new SparkMax(ClimberConstants.kMotorId, ClimberConstants.kClimbBusId, MotorType.kBrushless);
 
   private final Servo climbServo = new Servo(ClimberConstants.kServoPort);
 
@@ -46,7 +49,7 @@ public class ClimberIOSpark implements ClimberIO {
                     .positionConversionFactor(ClimberConstants.kClimbPositionConversionFactor)),
         ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
-    climbServo.setBoundsMicroseconds(2000, 0, 0, 0, 1000);
+      //climbServo.setBoundsMicroseconds(2000, 0, 0, 0, 1000);
   }
 
   public ClimberIOSpark() {

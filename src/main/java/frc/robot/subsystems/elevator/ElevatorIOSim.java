@@ -46,9 +46,9 @@ public class ElevatorIOSim implements ElevatorIO {
   // Updates Inputs w/ values from sim (Also tells sim how often to update itself)
   public void updateInputs(ElevatorInputs inputs) {
     simMotor.update(0.02);
-    inputs.height = Meters.of(simMotor.getPositionMeters());
-    inputs.velocity = MetersPerSecond.of(simMotor.getVelocityMetersPerSecond());
-    inputs.current = Amp.of(simMotor.getCurrentDrawAmps());
+    inputs.height = Meters.of(simMotor.getPosition());
+    inputs.velocity = MetersPerSecond.of(simMotor.getVelocity());
+    inputs.current = Amp.of(simMotor.getCurrentDraw());
     inputs.atSetpoint = pidController.atSetpoint();
   }
 
@@ -62,13 +62,13 @@ public class ElevatorIOSim implements ElevatorIO {
   public void resetEncoderPosition() {
     simMotor.setState(
         ElevatorConstants.kElevatorStartingHeight.in(Meters),
-        simMotor.getVelocityMetersPerSecond());
+        simMotor.getVelocity());
   }
 
   @Override
   public void goToPosition(Distance dist) {
     // TODO: referencing motor position specifically here is iffy, find a way to refactor
-    double motorOutput = pidController.calculate(simMotor.getPositionMeters(), dist.in(Meters));
+    double motorOutput = pidController.calculate(simMotor.getPosition(), dist.in(Meters));
 
     double ff = feedforward.calculate(motorOutput);
 

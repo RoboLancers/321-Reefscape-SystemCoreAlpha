@@ -47,14 +47,15 @@ public class Climber extends SubsystemBase {
   }
 
   public static Climber create() {
-    return RobotBase.isReal()
-        ? new Climber(
-            new ClimberIOSpark(),
-            ClimberIOSpark.config) // creates real mechanism if the code is running on a robot
-        : new Climber(
-            new ClimberIOSim(),
-            ClimberIOSim.config); // creates a sim mechanism if the code is not on a real robot
+    return new Climber(new ClimberIOSpark(), new ClimberConfig(0, 0, 0, 0));
   }
+  //   return RobotBase.isReal()
+  //       ? new Climber(
+  //           new ClimberIOSpark(),
+  //           ClimberIOSpark.config) // creates real mechanism if the code is running on a robot
+  //       : new Climber(
+  //           new ClimberIOSim(),
+  //           ClimberIOSim.config); // creates a sim mechanism if the code is not on a real robot
 
   public Command tune() {
     TunableConstant kP = new TunableConstant("/Climber/kP", config.kP());
@@ -95,7 +96,7 @@ public class Climber extends SubsystemBase {
                         inputs.climbAngle.in(Degrees)
                             <= ClimberConstants.kClimbThreshold.in(Degrees)))
         .andThen(Commands.runOnce(() -> io.setClimbVoltage(Volts.of(0))))
-        .andThen(Commands.waitSeconds(0.1))
+        .andThen(Commands.wait(0.1))
         .andThen(() -> io.setLockServoAngle(ClimberConstants.kServoLockPosition))
         .andThen(Commands.run(() -> io.setClimbVoltage(Volts.of(0))));
   }
@@ -128,7 +129,7 @@ public class Climber extends SubsystemBase {
                         inputs.climbAngle.in(Degrees)
                             <= ClimberConstants.kClimbThreshold.in(Degrees)))
         .andThen(Commands.runOnce(() -> io.setClimbVoltage(Volts.of(0))))
-        .andThen(Commands.waitSeconds(0.1))
+        .andThen(Commands.wait(0.1))
         .andThen(() -> io.setLockServoAngle(ClimberConstants.kServoLockPosition))
         .andThen(Commands.run(() -> io.setClimbVoltage(Volts.of(0))));
   }

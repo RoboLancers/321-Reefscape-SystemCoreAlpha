@@ -14,6 +14,7 @@ public class CoralEndEffectorConstants {
   public static final int kCoralSensorId = 21;
   public static final boolean kInvertedMotor = true;
   public static final int kCurrentLimit = 40;
+  public static final int kCoralBusId = 0;
 
   // Physical constants
   public static final double kMomentOfInertia = 0.01;

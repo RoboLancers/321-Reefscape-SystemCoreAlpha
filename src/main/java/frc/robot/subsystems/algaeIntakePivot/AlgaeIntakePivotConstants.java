@@ -21,6 +21,7 @@ public class AlgaeIntakePivotConstants {
   // motor, encoder, sensor IDs
   public static final int kPivotMotorLeftId = 18;
   public static final int kPivotMotorRightId = 19;
+  public static final int kPivotBusId = 1;
 
   // pivot thresholds
   public static final Angle kMinBlockedAngle = Degrees.of(20); // TODO: find these

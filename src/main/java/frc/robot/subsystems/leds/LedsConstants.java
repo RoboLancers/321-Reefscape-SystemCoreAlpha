@@ -18,6 +18,7 @@ public class LedsConstants {
   public static final int kLength = 38;
   public static final Time kBlinkSpeed = Seconds.of(0.3);
   public static final Color kAlgaeColor = new Color(133, 226, 203);
+  public static final int start = 0;
 
   // DRIVING PATTERNS
   // default mode - meteor yellow. TODO: add meteor pattern or something cool like that

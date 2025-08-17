@@ -29,7 +29,7 @@ public class ElevatorArmIOSpark implements ElevatorArmIO {
 
   // the motor that is controlling the arm (using a SparkMax controller)
   private SparkMax armMotor =
-      new SparkMax(ElevatorArmConstants.kElevatorArmId, MotorType.kBrushless);
+      new SparkMax(ElevatorArmConstants.kElevatorArmId, ElevatorArmConstants.kEncoderBusId, MotorType.kBrushless);
 
   // TODO: if elec uses a CANdi, use this for encoder output
   // absolute encoder from 0 to 360

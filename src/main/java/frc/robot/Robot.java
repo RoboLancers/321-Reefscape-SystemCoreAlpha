@@ -2,7 +2,7 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.epilogue.Epilogue;
+//import edu.wpi.first.epilogue.Epilogue;
 import edu.wpi.first.epilogue.Logged;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -33,7 +33,7 @@ public class Robot extends TimedRobot {
     DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
     CameraServer.startAutomaticCapture();
-    Epilogue.bind(this);
+    //Epilogue.bind(this);
 
     /*
      * RobotConstants.kAprilTagFieldLayout takes a significant amount of computing to load,

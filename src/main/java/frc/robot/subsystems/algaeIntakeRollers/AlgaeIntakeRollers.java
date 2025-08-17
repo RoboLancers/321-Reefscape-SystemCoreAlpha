@@ -37,13 +37,15 @@ public class AlgaeIntakeRollers extends SubsystemBase {
   }
 
   public static AlgaeIntakeRollers create() {
-    return RobotBase.isReal()
-        ? new AlgaeIntakeRollers(
-            new AlgaeIntakeRollersIOKraken(),
-            AlgaeIntakeRollersIOKraken.config) // creates real mechanism if robot, sim if no robot,
-        // ideal if disabled robot
-        : new AlgaeIntakeRollers(new AlgaeIntakeRollersIOSim(), AlgaeIntakeRollersIOSim.config);
+    return new AlgaeIntakeRollers(new AlgaeIntakeRollersIOKraken(), new AlgaeIntakeRollersConfig(0, 0, 0, 0));
   }
+    // return RobotBase.isReal()
+    //     ? new AlgaeIntakeRollers(
+    //         new AlgaeIntakeRollersIOKraken(),
+    //         AlgaeIntakeRollersIOKraken.config) // creates real mechanism if robot, sim if no robot,
+    //     // ideal if disabled robot
+    //     : new AlgaeIntakeRollers(new AlgaeIntakeRollersIOSim(), AlgaeIntakeRollersIOSim.config);
+  
 
   public static AlgaeIntakeRollers disable() {
     return new AlgaeIntakeRollers(

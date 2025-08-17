@@ -72,16 +72,17 @@ public class AlgaeIntakePivot extends SubsystemBase {
   }
 
   public static AlgaeIntakePivot create() {
-    return RobotBase.isReal() // TODO: possibly change from spark to kraken
-        ? new AlgaeIntakePivot(
-            new AlgaeIntakePivotIOSpark(),
-            AlgaeIntakePivotIOSpark
-                .config) // creates real mechanism if the code is running on a robot
-        : new AlgaeIntakePivot(
-            new AlgaeIntakePivotIOSim(),
-            AlgaeIntakePivotIOSim
-                .config); // creates a sim mechanism if the code is not on a real robot
+      return new AlgaeIntakePivot(new AlgaeIntakePivotIOSpark(), new AlgaeIntakePivotConfig(0, 0, 0, 0));
   }
+    // return RobotBase.isReal() // TODO: possibly change from spark to kraken
+    //     ? new AlgaeIntakePivot(
+    //         new AlgaeIntakePivotIOSpark()
+    //           AlgaeIntakePivotIOSpark
+    //               .config) // creates real mechanism if the code is running on a robot
+    //     : new AlgaeIntakePivot(
+    //         new AlgaeIntakePivotIOSim(),
+    //           AlgaeIntakePivotIOSim
+    //               .config); // creates a sim mechanism if the code is not on a real robot
 
   // creates placeholder implementation to disable robot
   public static AlgaeIntakePivot disable() {

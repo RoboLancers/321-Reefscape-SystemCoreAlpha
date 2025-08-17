@@ -5,7 +5,7 @@ import static edu.wpi.first.units.Units.Millimeter;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Volts;
 
-import com.playingwithfusion.TimeOfFlight;
+//import com.playingwithfusion.TimeOfFlight;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -29,7 +29,7 @@ public class CoralEndEffectorIOReal implements CoralEndEffectorIO {
 
   public CoralEndEffectorIOReal() {
     // motor initializatio & configuration
-    this.motor = new SparkMax(CoralEndEffectorConstants.kMotorPort, MotorType.kBrushless);
+    this.motor = new SparkMax(CoralEndEffectorConstants.kMotorPort, CoralEndEffectorConstants.kCoralBusId, MotorType.kBrushless);
     motor.configure(
         new SparkMaxConfig()
             .inverted(CoralEndEffectorConstants.kInvertedMotor)
@@ -38,7 +38,7 @@ public class CoralEndEffectorIOReal implements CoralEndEffectorIO {
         PersistMode.kPersistParameters);
 
     // init distance sensor
-    coralDistSensor = new TimeOfFlight(CoralEndEffectorConstants.kCoralSensorId);
+    //coralDistSensor = new TimeOfFlight(CoralEndEffectorConstants.kCoralSensorId);
   }
 
   // sets voltage of the coral intake wheels
@@ -48,11 +48,11 @@ public class CoralEndEffectorIOReal implements CoralEndEffectorIO {
   }
 
   // update inputs from the coral intake sensors
-  @Override
-  public void updateInputs(CoralEndEffectorInputs inputs) {
-    inputs.voltage = Volts.of(motor.getBusVoltage());
-    inputs.hasCoral =
-        coralDistSensor.getRange() < CoralEndEffectorConstants.kDetectionRange.in(Millimeter);
-    inputs.velocity = RPM.of(this.motor.getEncoder().getVelocity());
-  }
+  //@Override
+  //public void updateInputs(CoralEndEffectorInputs inputs) {
+    //inputs.voltage = Volts.of(motor.getBusVoltage());
+    //inputs.hasCoral =
+        //coralDistSensor.getRange() < CoralEndEffectorConstants.kDetectionRange.in(Millimeter);
+    //inputs.velocity = RPM.of(this.motor.getEncoder().getVelocity());
+  //}
 }

@@ -34,9 +34,9 @@ public class ElevatorArmIOSim implements ElevatorArmIO {
   // update inputs from the arm simulation
   public void updateInputs(ElevatorArmInputs inputs) {
     simMotor.update(0.02);
-    inputs.angle = Radians.of(simMotor.getAngleRads() - ElevatorArmConstants.kCMOffset.in(Radians));
-    inputs.velocity = RadiansPerSecond.of(simMotor.getVelocityRadPerSec());
-    inputs.current = Amps.of(simMotor.getCurrentDrawAmps());
+    inputs.angle = Radians.of(simMotor.getAngle() - ElevatorArmConstants.kCMOffset.in(Radians));
+    inputs.velocity = RadiansPerSecond.of(simMotor.getVelocity());
+    inputs.current = Amps.of(simMotor.getCurrentDraw());
   }
 
   // set voltage to the arm simulation

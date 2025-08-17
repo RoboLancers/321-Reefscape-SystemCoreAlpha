@@ -53,7 +53,7 @@ public class Leds extends SubsystemBase {
         buffer.createView(LedsConstants.kLength / 2, LedsConstants.kLength - 1).reversed();
     this.strip.setLength(buffer.getLength());
     this.strip.setData(buffer);
-    this.strip.start();
+    this.strip.setStart(LedsConstants.start);
 
     // sorted in descending order of priority
     signals = new TreeSet<Signal>(Comparator.comparingInt(Signal::priority).reversed());

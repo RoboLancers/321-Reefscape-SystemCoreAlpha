@@ -16,6 +16,8 @@ public class ElevatorArmConstants {
 
   public static final int kEncoderCANdiId = 0;
 
+  public static final int kEncoderBusId = 0;
+
   // the gearing of the arm
   public static final double kElevatorArmGearing = 60.45;
   // conversion factors for the relative encoder into angle in degrees

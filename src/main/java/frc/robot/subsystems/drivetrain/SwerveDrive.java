@@ -55,12 +55,15 @@ public interface SwerveDrive extends Subsystem {
           DrivetrainConstants.kHeadingConstraints);
 
   public static SwerveDrive create() {
-    return RobotBase.isReal()
-        ? new DrivetrainReal(
-            TunerConstants.kTunerDrivetrain.getDriveTrainConstants(),
-            TunerConstants.kTunerDrivetrain.getModuleConstants())
-        : new DrivetrainSim();
-  }
+//     return RobotBase.isReal()
+//         ? new DrivetrainReal(
+//             TunerConstants.kTunerDrivetrain.getDriveTrainConstants(),
+//             TunerConstants.kTunerDrivetrain.getModuleConstants())
+//         : new DrivetrainSim();
+    return new DrivetrainReal(
+                     TunerConstants.kTunerDrivetrain.getDriveTrainConstants(),
+                     TunerConstants.kTunerDrivetrain.getModuleConstants());
+                    }
 
   public default void configureAutoBuilder() {
     try { // try and catch for config exception
@@ -72,9 +75,9 @@ public interface SwerveDrive extends Subsystem {
           // Consumer of ChassisSpeeds and feedforwards to drive the robot
           (speeds, feedforwards) ->
               driveRobotCentric(
-                  speeds.vxMetersPerSecond,
-                  speeds.vyMetersPerSecond,
-                  speeds.omegaRadiansPerSecond,
+                  speeds.vx,
+                  speeds.vy,
+                  speeds.omega,
                   feedforwards),
           new PPHolonomicDriveController(
               // PID constants for translation
@@ -99,7 +102,7 @@ public interface SwerveDrive extends Subsystem {
   default ChassisSpeeds flipFieldSpeeds(ChassisSpeeds speeds) {
     return MyAlliance.isRed()
         ? new ChassisSpeeds(
-            -speeds.vxMetersPerSecond, -speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond)
+            -speeds.vx, -speeds.vy, speeds.omega)
         : speeds;
   }
 
@@ -168,18 +171,17 @@ public interface SwerveDrive extends Subsystem {
   default Command driveToFieldPose(Supplier<AlignmentSetpoint> pose, Supplier<Pose2d> currentPose) {
     return runOnce(
             () -> {
-              ChassisSpeeds speeds =
-                  ChassisSpeeds.fromRobotRelativeSpeeds(
-                      getChassisSpeeds(), currentPose.get().getRotation());
+
+            var speeds = getChassisSpeeds().toRobotRelative(currentPose.get().getRotation());
 
               xPoseController.reset(
-                  currentPose.get().getTranslation().getX(), speeds.vxMetersPerSecond);
+                  currentPose.get().getTranslation().getX(), speeds.vx);
 
               yPoseController.reset(
-                  currentPose.get().getTranslation().getY(), speeds.vyMetersPerSecond);
+                  currentPose.get().getTranslation().getY(), speeds.vy);
 
               thetaController.reset(
-                  currentPose.get().getRotation().getRadians(), speeds.omegaRadiansPerSecond);
+                  currentPose.get().getRotation().getRadians(), speeds.omega);
             })
         .andThen(
             run(

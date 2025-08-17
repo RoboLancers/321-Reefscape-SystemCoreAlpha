@@ -22,7 +22,8 @@ public class AlgaeIntakeRollersIOSpark implements AlgaeIntakeRollersIO {
   private DigitalInput algaeSensor = new DigitalInput(AlgaeIntakeRollersConstants.kBeamBreakId);
 
   private SparkMax rollerMotorLeft =
-      new SparkMax(AlgaeIntakeRollersConstants.kMotorId, MotorType.kBrushless);
+      new SparkMax(AlgaeIntakeRollersConstants.kMotorId, AlgaeIntakeRollersConstants.kRollerBusId,
+      MotorType.kBrushless);
 
   public AlgaeIntakeRollersIOSpark() {
     configureMotors(); // configures motors once algae spark object is created

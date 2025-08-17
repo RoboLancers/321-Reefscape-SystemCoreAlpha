@@ -73,6 +73,7 @@ public class DrivetrainReal extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder>
 
   private final Field2d poseField = new Field2d();
 
+
   private AlignmentSetpoint alignmentSetpoint = new AlignmentSetpoint(Pose2d.kZero, true);
 
   public DrivetrainReal(
@@ -95,11 +96,10 @@ public class DrivetrainReal extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder>
       DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier rotation) {
     return run(
         () -> {
-          var speeds =
-              ChassisSpeeds.discretize(
-                  translationX.getAsDouble(),
-                  translationY.getAsDouble(),
-                  rotation.getAsDouble(),
+
+          ChassisSpeeds speeds = new ChassisSpeeds(translationX.getAsDouble(), translationY.getAsDouble(), rotation.getAsDouble());
+
+          speeds.discretize(
                   RobotConstants.kRobotLoopPeriod.in(Seconds));
 
           // x braking
@@ -110,9 +110,9 @@ public class DrivetrainReal extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder>
 
           setControl(
               fieldCentricRequest
-                  .withVelocityX(speeds.vxMetersPerSecond)
-                  .withVelocityY(speeds.vyMetersPerSecond)
-                  .withRotationalRate(speeds.omegaRadiansPerSecond)
+                  .withVelocityX(speeds.vx)
+                  .withVelocityY(speeds.vy)
+                  .withRotationalRate(speeds.omega)
                   .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective));
         });
   }
@@ -130,18 +130,18 @@ public class DrivetrainReal extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder>
                   Rotation2d.fromRadians(
                       Math.atan2(rotationX.getAsDouble(), rotationY.getAsDouble())));
 
-          var speeds =
-              ChassisSpeeds.discretize(
-                  translationX.getAsDouble(),
-                  translationY.getAsDouble(),
-                  0,
+          var speeds = new ChassisSpeeds(translationX.getAsDouble(),
+          translationY.getAsDouble(),
+          0);
+
+              speeds.discretize(
                   RobotConstants.kRobotLoopPeriod.in(Seconds));
 
           setControl(
               fieldCentricFacingAngleRequest
                   .withDriveRequestType(DriveRequestType.Velocity)
-                  .withVelocityX(speeds.vxMetersPerSecond)
-                  .withVelocityY(speeds.vyMetersPerSecond)
+                  .withVelocityX(speeds.vx)
+                  .withVelocityY(speeds.vy)
                   .withTargetDirection(desiredRotation)
                   .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective));
         });
@@ -152,18 +152,17 @@ public class DrivetrainReal extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder>
       DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier rotation) {
     return run(
         () -> {
-          var speeds =
-              ChassisSpeeds.discretize(
-                  translationX.getAsDouble(),
-                  translationY.getAsDouble(),
-                  rotation.getAsDouble(),
-                  RobotConstants.kRobotLoopPeriod.in(Seconds));
+          var speeds = new ChassisSpeeds( translationX.getAsDouble(),
+          translationY.getAsDouble(),
+          rotation.getAsDouble());
+              
+                speeds.discretize(RobotConstants.kRobotLoopPeriod.in(Seconds));
 
           setControl(
               fieldCentricRequest
-                  .withVelocityX(speeds.vxMetersPerSecond)
-                  .withVelocityY(speeds.vyMetersPerSecond)
-                  .withRotationalRate(speeds.omegaRadiansPerSecond));
+                  .withVelocityX(speeds.vx)
+                  .withVelocityY(speeds.vy)
+                  .withRotationalRate(speeds.omega));
         });
   }
   ;
@@ -217,47 +216,46 @@ public class DrivetrainReal extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder>
     double ffFactor = 0;
 
     ChassisSpeeds targetSpeeds =
-        ChassisSpeeds.discretize(
-            xPoseController.calculate(getPose().getX(), pose.getX())
-                + xPoseController.getSetpoint().velocity * ffFactor,
-            yPoseController.calculate(getPose().getY(), pose.getY())
-                + yPoseController.getSetpoint().velocity * ffFactor,
-            thetaController.calculate(
-                    getPose().getRotation().getRadians(), pose.getRotation().getRadians())
-                + thetaController.getSetpoint().velocity * ffFactor,
-            RobotConstants.kRobotLoopPeriod.in(Seconds));
+           new ChassisSpeeds( xPoseController.calculate(getPose().getX(), pose.getX())
+           + xPoseController.getSetpoint().velocity * ffFactor,
+       yPoseController.calculate(getPose().getY(), pose.getY())
+           + yPoseController.getSetpoint().velocity * ffFactor,
+       thetaController.calculate(
+               getPose().getRotation().getRadians(), pose.getRotation().getRadians())
+           + thetaController.getSetpoint().velocity * ffFactor);
+           targetSpeeds.discretize(RobotConstants.kRobotLoopPeriod.in(Seconds));
 
     if (currentPose.getTranslation().getDistance(alignmentSetpoint.pose().getTranslation())
         < DrivetrainConstants.kAlignmentSetpointTranslationTolerance.in(Meters))
-      targetSpeeds = new ChassisSpeeds(0, 0, targetSpeeds.omegaRadiansPerSecond);
+      targetSpeeds = new ChassisSpeeds(0, 0, targetSpeeds.omega);
 
     if (Math.abs(
             currentPose.getRotation().minus(alignmentSetpoint.pose().getRotation()).getDegrees())
         < DrivetrainConstants.kAlignmentSetpointRotationTolerance.in(Degrees))
       targetSpeeds =
-          new ChassisSpeeds(targetSpeeds.vxMetersPerSecond, targetSpeeds.vyMetersPerSecond, 0);
+          new ChassisSpeeds(targetSpeeds.vx, targetSpeeds.vy, 0);
 
     setControl(
         fieldCentricRequest
             .withDriveRequestType(DriveRequestType.Velocity)
-            .withVelocityX(targetSpeeds.vxMetersPerSecond)
-            .withVelocityY(targetSpeeds.vyMetersPerSecond)
-            .withRotationalRate(targetSpeeds.omegaRadiansPerSecond)
+            .withVelocityX(targetSpeeds.vx)
+            .withVelocityY(targetSpeeds.vy)
+            .withRotationalRate(targetSpeeds.omega)
             .withForwardPerspective(ForwardPerspectiveValue.BlueAlliance));
   }
 
   // drive with absolute heading control
   @Override
   public void driveFixedHeading(double translationX, double translationY, Rotation2d rotation) {
-    var speeds =
-        ChassisSpeeds.discretize(
-            translationX, translationY, 0, RobotConstants.kRobotLoopPeriod.in(Seconds));
+    var speeds = new ChassisSpeeds(translationX, translationY, 0);
+        
+          speeds.discretize(RobotConstants.kRobotLoopPeriod.in(Seconds));
 
     setControl(
         fieldCentricFacingAngleRequest
             .withDriveRequestType(DriveRequestType.Velocity)
-            .withVelocityX(speeds.vxMetersPerSecond)
-            .withVelocityY(speeds.vyMetersPerSecond)
+            .withVelocityX(speeds.vx)
+            .withVelocityY(speeds.vy)
             .withTargetDirection(
                 MyAlliance.isRed() ? rotation.plus(Rotation2d.fromDegrees(180)) : rotation)
             .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective));

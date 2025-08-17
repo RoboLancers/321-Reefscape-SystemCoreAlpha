@@ -20,6 +20,7 @@ public class ClimberConstants {
   public static final int kMotorId = 20; // placeholder id
   public static final int kServoPort = 0;
   public static final int kLimitSwitchPort = 0;
+  public static final int kClimbBusId = 1;
 
   // climb physical constants
   public static final double kClimbGearing = 100 * 28.0 / 10;

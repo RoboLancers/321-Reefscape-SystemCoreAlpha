@@ -26,10 +26,12 @@ public class AlgaeIntakePivotIOSpark implements AlgaeIntakePivotIO {
   // device ids are plcaeholders
   private SparkMax pivotMotorLeft =
       new SparkMax(
-          AlgaeIntakePivotConstants.kPivotMotorLeftId,
+          AlgaeIntakePivotConstants.kPivotMotorLeftId,AlgaeIntakePivotConstants.kPivotBusId,
           MotorType.kBrushless); // corresponds to left and right motors for pivot
   private SparkMax pivotMotorRight =
-      new SparkMax(AlgaeIntakePivotConstants.kPivotMotorRightId, MotorType.kBrushless);
+      new SparkMax(
+        AlgaeIntakePivotConstants.kPivotMotorRightId,AlgaeIntakePivotConstants.kPivotBusId,
+        MotorType.kBrushless);
 
   public AlgaeIntakePivotIOSpark() {
     configureMotors(); // configures motors once algae spark object

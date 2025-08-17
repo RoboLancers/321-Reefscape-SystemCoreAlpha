@@ -12,6 +12,7 @@ public class AlgaeIntakeRollersConstants {
   // motor, sensor IDs
   public static final int kBeamBreakId = 0;
   public static final int kMotorId = 17;
+  public static final int kRollerBusId = 1;
 
   // function constants
   public static final Voltage kRollerIntakeVoltage = Volts.of(8); // test
